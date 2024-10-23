@@ -58,7 +58,8 @@ fun RegisterScreen(
 
 //    val coroutineScope = rememberCoroutineScope()
 
-    Scaffold {
+    Scaffold(
+    ) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -247,7 +248,7 @@ fun RegisterScreen(
                     }
 
                     TextButton(
-                        onClick = { navController.navigate("LoginScreen") },
+                        onClick = { navController.navigate("login") },
                         modifier = Modifier
                             .padding(top = 1.dp, start = 40.dp, end = 40.dp)
                             .fillMaxWidth()

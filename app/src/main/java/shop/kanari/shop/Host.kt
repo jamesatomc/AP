@@ -18,7 +18,7 @@ import shop.kanari.shop.home.productcategory.LaptopList
 fun AppHost() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "register") {
+    NavHost(navController = navController, startDestination = "login") {
         composable("home") {
             HomeScreen(
                 navController = navController
