@@ -182,9 +182,9 @@ fun LoginScreen(
                         ),
                         trailingIcon = {
                             val image = if (passwordVisible) {
-                                painterResource(id = R.drawable.baseline_visibility_24) // Replace with your drawable ID
+                                painterResource(id = R.drawable.visibility) // Replace with your drawable ID
                             } else {
-                                painterResource(id = R.drawable.baseline_visibility_24) // Replace with your drawable ID
+                                painterResource(id = R.drawable.visibility) // Replace with your drawable ID
                             }
 
                             IconButton(onClick = { passwordVisible = !passwordVisible }) {

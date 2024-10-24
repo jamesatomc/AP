@@ -110,7 +110,7 @@ fun Cart(navController: NavHostController) {
                         ) {
                             Box {
                                 Icon(
-                                    painter = painterResource(R.drawable.baseline_add_shopping_cart),contentDescription = "",
+                                    painter = painterResource(R.drawable.add_shopping_cart),contentDescription = "",
                                     modifier = Modifier.size(30.dp),
                                 )
                                 Box(
@@ -263,7 +263,7 @@ fun Cart(navController: NavHostController) {
                         Text(text = "$10,000", fontSize = 18.sp, fontWeight = FontWeight.Bold)
                         Row {
                             IconButton(onClick = { /*TODO*/ }) {
-                               Icon(painter = painterResource(id = R.drawable.baseline_add_shopping_cart), contentDescription = "Add" )
+                               Icon(painter = painterResource(id = R.drawable.add_shopping_cart), contentDescription = "Add" )
                             }
                             FilledTonalButton(
                                 onClick = { /*TODO*/ },

@@ -50,5 +50,8 @@ fun AppHost() {
         composable("register") {
            RegisterScreen(navController = navController)
         }
+        composable("forgeScreen") {
+            ForgePasswordScreen(navController = navController)
+        }
     }
 }
