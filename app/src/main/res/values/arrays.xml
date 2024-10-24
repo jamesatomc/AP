@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/values/arrays.xml -->
+<resources>
+    <array name="com_google_android_gms_fonts_certs">
+        <item>@cert/cert1</item>
+        <item>@cert/cert2</item>
+        <!-- Add other certificates as needed -->
+    </array>
+</resources>
