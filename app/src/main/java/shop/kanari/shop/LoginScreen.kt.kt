@@ -2,6 +2,8 @@ package shop.kanari.shop
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -18,8 +20,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -52,6 +52,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.tasks.Task
+import shop.kanari.shop.google.GoogleApiContract
 import shop.kanari.shop.ui.theme.ShopTheme
 
 @ExperimentalMaterial3Api
@@ -64,9 +67,23 @@ fun LoginScreen(
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val isLoading by remember { mutableStateOf(false) }
-    val loginError by remember { mutableStateOf<String?>(null) }
+    var loginError by remember { mutableStateOf<String?>(null) }
 
-//    val coroutineScope = rememberCoroutineScope()
+    // Google Sign-In launcher
+    val googleSignInLauncher: ActivityResultLauncher<Int> = rememberLauncherForActivityResult(
+        contract = GoogleApiContract()
+    ) { task: Task<GoogleSignInAccount>? ->
+        task?.addOnCompleteListener { completedTask ->
+            if (completedTask.isSuccessful) {
+                val account = completedTask.result
+                // Handle successful sign-in
+                navController.navigate("home")
+            } else {
+                // Handle sign-in failure
+                loginError = "Google Sign-In failed"
+            }
+        }
+    }
 
     Scaffold {
         Box(
@@ -248,7 +265,7 @@ fun LoginScreen(
                     // Google Sign-In Button
                     Button(
                         onClick = {
-
+                            googleSignInLauncher.launch(1)
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.White,
@@ -259,7 +276,7 @@ fun LoginScreen(
                             .fillMaxWidth()
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_launcher_foreground), // Replace with your Google logo drawable
+                            painter = painterResource(id = R.drawable.pngwing_com), // Replace with your Google logo drawable
                             contentDescription = "Google Sign-In",
                             modifier = Modifier.size(24.dp)
                         )
