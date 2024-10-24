@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import shop.kanari.shop.ui.theme.ShopTheme
 
 class MainActivity : ComponentActivity() {
-
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
