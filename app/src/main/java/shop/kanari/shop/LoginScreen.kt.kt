@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -20,6 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults.textFieldColors
@@ -39,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -109,11 +112,12 @@ fun LoginScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom
                 ) {
-
+                    var passwordVisible by rememberSaveable { mutableStateOf(false) }
                     TextField(
                         value = username,
                         onValueChange = { username = it },
                         label = { Text("Username") },
+                        placeholder = { Text("Username") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -132,8 +136,6 @@ fun LoginScreen(
                         )
                     )
                     Spacer(Modifier.size(16.dp))
-                    var passwordVisible by rememberSaveable { mutableStateOf(false) }
-
                     TextField(
                         value = password,
                         onValueChange = { password = it },
@@ -157,15 +159,21 @@ fun LoginScreen(
                             focusedIndicatorColor = Color.Transparent
                         ),
                         trailingIcon = {
-                            val image = if (passwordVisible)
-                                Icons.Filled.Lock
-                            else Icons.Filled.Lock
+                            val image = if (passwordVisible) {
+                                painterResource(id = R.drawable.baseline_visibility_24) // Replace with your drawable ID
+                            } else {
+                                painterResource(id = R.drawable.baseline_visibility_24) // Replace with your drawable ID
+                            }
 
                             // Please provide localized description for accessibility services
                             val description = if (passwordVisible) "Hide password" else "Show password"
 
-                            IconButton(onClick = {passwordVisible = !passwordVisible}){
-                                Icon(imageVector  = image, description)
+                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                Icon(
+                                    modifier = Modifier.size(24.dp),
+                                    painter = image, // Use painter instead of imageVector
+                                    contentDescription = if (passwordVisible) "Hide password" else "Show password"
+                                )
                             }
                         }
                     )
@@ -235,6 +243,28 @@ fun LoginScreen(
                             .fillMaxWidth()
                     ) {
                         Text("Register")
+                    }
+
+                    // Google Sign-In Button
+                    Button(
+                        onClick = {
+
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.White,
+                            contentColor = Color.Black
+                        ),
+                        modifier = Modifier
+                            .padding(top = 16.dp, start = 40.dp, end = 40.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_launcher_foreground), // Replace with your Google logo drawable
+                            contentDescription = "Google Sign-In",
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Sign in with Google", color = Color.Black)
                     }
                 }
             }
