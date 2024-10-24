@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,32 +13,26 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -54,6 +46,7 @@ import shop.kanari.shop.ui.theme.ShopTheme
 import shop.kanari.shop.utils.SessionManager
 import shop.kanari.shop.widget.ButtonType
 import shop.kanari.shop.widget.CustomButton
+import shop.kanari.shop.widget.CustomTextField
 
 @ExperimentalMaterial3Api
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
@@ -66,9 +59,10 @@ fun RegisterScreen(
     var password by remember { mutableStateOf("") }
     var firstname by remember { mutableStateOf("") }
     var lastname by remember { mutableStateOf("") }
+
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
     val isLoading by remember { mutableStateOf(false) }
-    val registerError by remember { mutableStateOf<String?>(null) }
-    var loginError by remember { mutableStateOf<String?>(null) }
+    var registerError by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
 
     // Google Sign-In launcher
@@ -85,7 +79,7 @@ fun RegisterScreen(
                 }
             } else {
                 // Handle sign-in failure
-                loginError = "Google Sign-In failed"
+                registerError = "Google Sign-In failed"
             }
         }
     }
@@ -135,163 +129,67 @@ fun RegisterScreen(
                     verticalArrangement = Arrangement.Bottom
                 ) {
 
-
-                    TextField(
+                    CustomTextField(
                         value = username,
                         onValueChange = { username = it },
-                        label = { Text("Username") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .border(
-                                BorderStroke(
-                                    color = Color.Transparent,
-                                    width = 1.dp
-                                ),
-                                shape = RoundedCornerShape(10.dp)
-                            )
-                            .clip(RoundedCornerShape(10.dp)),
-                        colors = ExposedDropdownMenuDefaults.textFieldColors(
-                            unfocusedIndicatorColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent
-                        )
+                        label = "Username",
+                        placeholder = "Username",
+                        keyboardType = KeyboardType.Text
                     )
                     Spacer(modifier = Modifier.size(16.dp))
-                    TextField(
+                    CustomTextField(
                         value = email,
                         onValueChange = { email = it },
-                        label = { Text("Email") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .border(
-                                BorderStroke(
-                                    color = Color.Transparent,
-                                    width = 1.dp
-                                ),
-                                shape = RoundedCornerShape(10.dp)
-                            )
-                            .clip(RoundedCornerShape(10.dp)),
-                        colors = ExposedDropdownMenuDefaults.textFieldColors(
-                            unfocusedIndicatorColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent
-                        )
+                        label = "Email",
+                        placeholder = "Email",
+                        keyboardType = KeyboardType.Text
                     )
                     Spacer(modifier = Modifier.size(16.dp))
-                    TextField(
+                    CustomTextField(
                         value = password,
                         onValueChange = { password = it },
-                        label = { Text("Password") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .border(
-                                BorderStroke(
-                                    color = Color.Transparent,
-                                    width = 1.dp
-                                ),
-                                shape = RoundedCornerShape(10.dp)
-                            )
-                            .clip(RoundedCornerShape(10.dp)),
-                        colors = ExposedDropdownMenuDefaults.textFieldColors(
-                            unfocusedIndicatorColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent
-                        )
+                        label = "Password",
+                        placeholder = "Password",
+                        keyboardType = KeyboardType.Password,
+                        isPassword = true,
+                        passwordVisible = passwordVisible,
+                        onPasswordVisibilityChange = { passwordVisible = !passwordVisible }
                     )
                     Spacer(modifier = Modifier.size(16.dp))
-                    TextField(
+                    CustomTextField(
                         value = firstname,
                         onValueChange = { firstname = it },
-                        label = { Text("Firstname") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .border(
-                                BorderStroke(
-                                    color = Color.Transparent,
-                                    width = 1.dp
-                                ),
-                                shape = RoundedCornerShape(10.dp)
-                            )
-                            .clip(RoundedCornerShape(10.dp)),
-                        colors = ExposedDropdownMenuDefaults.textFieldColors(
-                            unfocusedIndicatorColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent
-                        )
+                        label = "Firstname",
+                        placeholder = "Firstname",
+                        keyboardType = KeyboardType.Text
                     )
                     Spacer(modifier = Modifier.size(16.dp))
-                    TextField(
-                        value = lastname ,
+                    CustomTextField(
+                        value = lastname,
                         onValueChange = { lastname = it },
-                        label = { Text("Lastname") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .border(
-                                BorderStroke(
-                                    color = Color.Transparent,
-                                    width = 1.dp
-                                ),
-                                shape = RoundedCornerShape(10.dp)
-                            )
-                            .clip(RoundedCornerShape(10.dp)),
-                        colors = ExposedDropdownMenuDefaults.textFieldColors(
-                            unfocusedIndicatorColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent
-                        )
+                        label = "Lastname",
+                        placeholder = "Lastname",
+                        keyboardType = KeyboardType.Text
                     )
-
-                    Button(
+                    Spacer(modifier = Modifier.size(16.dp))
+                    CustomButton(
+                        cornerRadius = 20.dp,
+                        text = "Continue",
                         onClick = {
-//                            isLoading = true
-//                            isLoading = false
-//                            coroutineScope.launch {
-//                                try {
-//                                    val response = registerService.register(RegisterRequest(username, email, password, firstname, lastname))
-//                                    if (response.isSuccessful) {
-//
-//                                        navController.navigate("RootHomeScreen") {
-//                                            popUpTo("registerScreen") { inclusive = true }
-//                                        }
-//
-//                                    } else {
-//                                        registerError = response.errorBody()
-//                                    }
-//                                } catch (e: Exception) {
-//                                    registerError = "Register failed"
-//                                } finally {
-//                                    isLoading = false
-//                                }
-//                            }
+                            navController.navigate("home")
+
                         },
-                        enabled = !isLoading,
-                        modifier = Modifier
-                            .padding(top = 16.dp, start = 40.dp, end = 40.dp)
-                            .fillMaxWidth()
-                    ) {
-                        if (isLoading) {
-                            CircularProgressIndicator(color = Color.White)
-                        } else {
-                            Text("Continue")
-                        }
-                    }
+                        isLoading = isLoading
+                    )
                     if (registerError != null) {
                         Text(registerError!!, color = Color.Red)
                     }
-
-//                    CustomButton(
-//                        text = "Login",
-//                        onClick = { navController.navigate("login") },
-//                        isLoading = false,
-//                        buttonType = ButtonType.BUTTON
-//                    )
-
+                    // Login Button
                     CustomButton(
                         text = "Login",
                         onClick = { navController.navigate("login") },
                         buttonType = ButtonType.TEXT_BUTTON
                     )
-
                     // Google Sign-In Button
                     CustomButton(
                         cornerRadius = 20.dp,

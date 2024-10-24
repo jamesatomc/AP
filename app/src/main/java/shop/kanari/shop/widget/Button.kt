@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.draw.shadow
 
 enum class ButtonType {
     BUTTON, TEXT_BUTTON
@@ -36,6 +37,7 @@ fun CustomButton(
     height: Dp = 48.dp,
     width: Modifier = Modifier.fillMaxWidth(),
     cornerRadius: Dp = 4.dp,
+    shadowElevation: Dp = 8.dp, // Add shadow elevation parameter
     icon: Painter? = null,
     iconDescription: String? = null,
     buttonType: ButtonType = ButtonType.BUTTON
@@ -44,6 +46,13 @@ fun CustomButton(
         .padding(top = 16.dp, start = 40.dp, end = 40.dp)
         .height(height)
         .then(width)
+        .let {
+            if (buttonType == ButtonType.BUTTON) {
+                it.shadow(shadowElevation, RoundedCornerShape(cornerRadius)) // Add shadow only for BUTTON
+            } else {
+                it
+            }
+        }
 
     when (buttonType) {
         ButtonType.BUTTON -> {

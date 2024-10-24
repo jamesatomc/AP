@@ -16,11 +16,13 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import shop.kanari.shop.R
 
@@ -35,7 +37,8 @@ fun CustomTextField(
     isPassword: Boolean = false,
     passwordVisible: Boolean = false,
     onPasswordVisibilityChange: (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    shadowElevation: Dp = 8.dp // Add shadow elevation parameter
 ) {
     TextField(
         value = value,
@@ -54,7 +57,8 @@ fun CustomTextField(
                 ),
                 shape = RoundedCornerShape(10.dp)
             )
-            .clip(RoundedCornerShape(10.dp)),
+            .clip(RoundedCornerShape(10.dp))
+            .shadow(shadowElevation, RoundedCornerShape(10.dp)), // Add shadow modifier
         colors = textFieldColors(
             unfocusedIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent

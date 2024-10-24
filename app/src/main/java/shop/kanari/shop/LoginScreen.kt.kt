@@ -134,7 +134,6 @@ fun LoginScreen(
                         keyboardType = KeyboardType.Text
                     )
                     Spacer(Modifier.size(16.dp))
-                    Spacer(Modifier.size(16.dp))
                     CustomTextField(
                         value = password,
                         onValueChange = { password = it },
@@ -145,6 +144,7 @@ fun LoginScreen(
                         passwordVisible = passwordVisible,
                         onPasswordVisibilityChange = { passwordVisible = !passwordVisible }
                     )
+                    Spacer(Modifier.size(16.dp))
                     Box(Modifier.fillMaxWidth()) {
                         TextButton(
                             onClick = {
