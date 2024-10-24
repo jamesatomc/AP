@@ -13,14 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -48,6 +44,8 @@ import com.google.android.gms.tasks.Task
 import shop.kanari.shop.google.GoogleApiContract
 import shop.kanari.shop.ui.theme.ShopTheme
 import shop.kanari.shop.utils.SessionManager
+import shop.kanari.shop.widget.ButtonType
+import shop.kanari.shop.widget.CustomButton
 import shop.kanari.shop.widget.CustomTextField
 
 
@@ -73,7 +71,7 @@ fun LoginScreen(
         task?.addOnCompleteListener { completedTask ->
             if (completedTask.isSuccessful) {
                 // Handle successful sign-in
-                SessionManager.setLogin(context, true)
+                SessionManager.setLoggedIn(context, true)
                 navController.navigate("home") {
                     popUpTo("login") { inclusive = true }
                 }
@@ -160,40 +158,27 @@ fun LoginScreen(
                             Text("Forge Password")
                         }
                     }
-
-                    Button(
+                    CustomButton(
+                        cornerRadius = 20.dp,
+                        text = "Login",
                         onClick = {
                             navController.navigate("home")
                         },
-                        enabled = !isLoading,
-                        modifier = Modifier
-                            .padding(top = 16.dp, start = 40.dp, end = 40.dp)
-                            .fillMaxWidth()
-                    ) {
-                        if (isLoading) {
-                            CircularProgressIndicator(color = Color.White)
-                        } else {
-                            Text("Login")
-                        }
-                    }
+                        isLoading = isLoading
+                    )
 
                     if (loginError != null) {
                         Text(loginError!!, color = Color.Red)
                     }
+                    CustomButton(
+                        text = "Register",
+                        onClick = { navController.navigate("register") },
+                        buttonType = ButtonType.TEXT_BUTTON
+                    )
 
-                    TextButton(
-                        onClick = {
-                            navController.navigate("register")
-                        },
-                        modifier = Modifier
-                            .padding(top = 1.dp, start = 40.dp, end = 40.dp)
-                            .fillMaxWidth()
-                    ) {
-                        Text("Register")
-                    }
-
-                    // Google Sign-In Button
-                    Button(
+                    CustomButton(
+                        cornerRadius = 20.dp,
+                        text = "Sign in with Google",
                         onClick = {
                             googleSignInLauncher.launch(1)
                         },
@@ -201,18 +186,9 @@ fun LoginScreen(
                             containerColor = Color.White,
                             contentColor = Color.Black
                         ),
-                        modifier = Modifier
-                            .padding(top = 16.dp, start = 40.dp, end = 40.dp)
-                            .fillMaxWidth()
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.pngwing_com), // Replace with your Google logo drawable
-                            contentDescription = "Google Sign-In",
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Sign in with Google", color = Color.Black)
-                    }
+                        icon = painterResource(id = R.drawable.pngwing_com),
+                        iconDescription = "Google Sign-In"
+                    )
                 }
             }
         }

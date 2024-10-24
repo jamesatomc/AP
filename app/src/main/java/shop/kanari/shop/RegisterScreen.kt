@@ -52,6 +52,8 @@ import com.google.android.gms.tasks.Task
 import shop.kanari.shop.google.GoogleApiContract
 import shop.kanari.shop.ui.theme.ShopTheme
 import shop.kanari.shop.utils.SessionManager
+import shop.kanari.shop.widget.ButtonType
+import shop.kanari.shop.widget.CustomButton
 
 @ExperimentalMaterial3Api
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
@@ -68,15 +70,16 @@ fun RegisterScreen(
     val registerError by remember { mutableStateOf<String?>(null) }
     var loginError by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
+
     // Google Sign-In launcher
     val googleSignInLauncher: ActivityResultLauncher<Int> = rememberLauncherForActivityResult(
         contract = GoogleApiContract()
     ) { task: Task<GoogleSignInAccount>? ->
-// Inside the Google Sign-In task onCompleteListener
+        // Inside the Google Sign-In task onCompleteListener
         task?.addOnCompleteListener { completedTask ->
             if (completedTask.isSuccessful) {
                 // Handle successful sign-in
-                SessionManager.setLogin(context, true)
+                SessionManager.setRegistered(context, true)
                 navController.navigate("home") {
                     popUpTo("register") { inclusive = true }
                 }
@@ -276,16 +279,23 @@ fun RegisterScreen(
                         Text(registerError!!, color = Color.Red)
                     }
 
-                    TextButton(
+//                    CustomButton(
+//                        text = "Login",
+//                        onClick = { navController.navigate("login") },
+//                        isLoading = false,
+//                        buttonType = ButtonType.BUTTON
+//                    )
+
+                    CustomButton(
+                        text = "Login",
                         onClick = { navController.navigate("login") },
-                        modifier = Modifier
-                            .padding(top = 1.dp, start = 40.dp, end = 40.dp)
-                            .fillMaxWidth()
-                    ) {
-                        Text("Sign In")
-                    }
+                        buttonType = ButtonType.TEXT_BUTTON
+                    )
+
                     // Google Sign-In Button
-                    Button(
+                    CustomButton(
+                        cornerRadius = 20.dp,
+                        text = "Sign in with Google",
                         onClick = {
                             googleSignInLauncher.launch(1)
                         },
@@ -293,18 +303,9 @@ fun RegisterScreen(
                             containerColor = Color.White,
                             contentColor = Color.Black
                         ),
-                        modifier = Modifier
-                            .padding(top = 16.dp, start = 40.dp, end = 40.dp)
-                            .fillMaxWidth()
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.pngwing_com), // Replace with your Google logo drawable
-                            contentDescription = "Google Sign-In",
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Sign in with Google", color = Color.Black)
-                    }
+                        icon = painterResource(id = R.drawable.pngwing_com),
+                        iconDescription = "Google Sign-In"
+                    )
                 }
             }
         }

@@ -68,10 +68,7 @@ fun HomeScreen(navController: NavHostController) {
                     containerColor = Color.Transparent,
                 ),
                 scrollBehavior = scrollBehavior,
-
-                title = {
-
-                },
+                title = {},
                 navigationIcon = {
                     Box(
                         Modifier
@@ -92,43 +89,34 @@ fun HomeScreen(navController: NavHostController) {
                                 modifier = Modifier.size(30.dp),
                                 imageVector = Icons.Filled.Menu,
                                 contentDescription = "Localized description",
-//                                tint = MaterialTheme.colorScheme.background
                             )
                         }
                     }
                 },
-actions = {
-    val context = LocalContext.current
-    Box(
-        Modifier
-            .width(60.dp)
-            .height(60.dp),
-        contentAlignment = Alignment.CenterEnd
-    ) {
-        IconButton(
-            onClick = {
-                // Perform logout operation
-                GoogleSignIn.getClient(context, GoogleSignInOptions.DEFAULT_SIGN_IN).signOut().addOnCompleteListener {
-                    SessionManager.setLogin(context, false)
-                    navController.navigate("login") {
-                        popUpTo("home") { inclusive = true }
+                actions = {
+                    val context = LocalContext.current
+                    Box(
+                        Modifier
+                            .width(60.dp)
+                            .height(60.dp),
+                        contentAlignment = Alignment.CenterEnd
+                    ) {
+                        IconButton(
+                            onClick = {
+                                // Perform logout operation
+                                SessionManager.logout(context, navController)
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.home),
+                                contentDescription = "Logout",
+                                modifier = Modifier.size(30.dp)
+                            )
+                        }
                     }
                 }
-            }
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.home),
-                contentDescription = "Logout",
-                modifier = Modifier.size(30.dp)
-            )
-        }
-    }
-}
             )
         },
-//        bottomBar = {
-//
-//        }
     ) {
         Column(
             Modifier
@@ -137,7 +125,6 @@ actions = {
             verticalArrangement = Arrangement.spacedBy(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Spacer(Modifier.height(120.dp))
             Promotions()
             Box(
@@ -152,7 +139,6 @@ actions = {
                 Text(text = "ยอดนิยม", fontSize = 18.sp)
             }
             ProductList()
-            
         }
     }
 }

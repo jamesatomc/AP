@@ -22,7 +22,11 @@ fun AppHost() {
     val context = LocalContext.current
 
     // Check login status and set start destination
-    val startDestination = if (SessionManager.isLoggedIn(context)) "home" else "login"
+    val startDestination = when {
+        SessionManager.isLoggedIn(context) -> "home"
+        !SessionManager.isRegistered(context) -> "login"
+        else -> "register"
+    }
 
     NavHost(navController = navController, startDestination = startDestination) {
         composable("home") {
