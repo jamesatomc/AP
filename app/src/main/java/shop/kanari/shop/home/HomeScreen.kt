@@ -38,12 +38,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import androidx.compose.ui.platform.LocalContext
+
 import shop.kanari.shop.home.components.ProductList
 import shop.kanari.shop.home.components.Promotions
 import shop.kanari.shop.home.components.ZoneProduct
 import shop.kanari.shop.R
 import shop.kanari.shop.ui.theme.ShopTheme
 import kotlinx.coroutines.launch
+import shop.kanari.shop.utils.SessionManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -92,25 +97,33 @@ fun HomeScreen(navController: NavHostController) {
                         }
                     }
                 },
-                actions = {
-                    Box(
-                        Modifier
-                            .width(60.dp)
-                            .height(60.dp),
-                        contentAlignment = Alignment.CenterEnd
-                    ) {
-                        IconButton(
-                            onClick = { /*TODO*/ }
-                        ) {
-                            Icon(
-                                painter = painterResource(R.drawable.home),
-                                contentDescription = "",
-                                modifier = Modifier.size(30.dp),
-//                                tint = MaterialTheme.colorScheme.background
-                            )
-                        }
+actions = {
+    val context = LocalContext.current
+    Box(
+        Modifier
+            .width(60.dp)
+            .height(60.dp),
+        contentAlignment = Alignment.CenterEnd
+    ) {
+        IconButton(
+            onClick = {
+                // Perform logout operation
+                GoogleSignIn.getClient(context, GoogleSignInOptions.DEFAULT_SIGN_IN).signOut().addOnCompleteListener {
+                    SessionManager.setLogin(context, false)
+                    navController.navigate("login") {
+                        popUpTo("home") { inclusive = true }
                     }
                 }
+            }
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.home),
+                contentDescription = "Logout",
+                modifier = Modifier.size(30.dp)
+            )
+        }
+    }
+}
             )
         },
 //        bottomBar = {

@@ -1,3 +1,4 @@
+// GoogleApiContract.kt
 package shop.kanari.shop.google
 
 import android.app.Activity
@@ -17,17 +18,15 @@ class GoogleApiContract : ActivityResultContract<Int, Task<GoogleSignInAccount>?
             .requestEmail()
             .build()
 
-        val intent = GoogleSignIn.getClient(context, gso)
-        return intent.signInIntent
+        val googleSignInClient = GoogleSignIn.getClient(context, gso)
+        return googleSignInClient.signInIntent
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): Task<GoogleSignInAccount>? {
-        return when (resultCode) {
-            Activity.RESULT_OK -> {
-                GoogleSignIn.getSignedInAccountFromIntent(intent)
-            }
-
-            else -> null
+        return if (resultCode == Activity.RESULT_OK && intent != null) {
+            GoogleSignIn.getSignedInAccountFromIntent(intent)
+        } else {
+            null
         }
     }
 }

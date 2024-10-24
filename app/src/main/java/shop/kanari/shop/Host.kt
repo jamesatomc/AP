@@ -2,6 +2,7 @@ package shop.kanari.shop
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -12,17 +13,20 @@ import shop.kanari.shop.home.productcategory.DesktopList
 import shop.kanari.shop.home.productcategory.DisplayList
 
 import shop.kanari.shop.home.productcategory.LaptopList
+import shop.kanari.shop.utils.SessionManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppHost() {
     val navController = rememberNavController()
+    val context = LocalContext.current
 
-    NavHost(navController = navController, startDestination = "login") {
+    // Check login status and set start destination
+    val startDestination = if (SessionManager.isLoggedIn(context)) "home" else "login"
+
+    NavHost(navController = navController, startDestination = startDestination) {
         composable("home") {
-            HomeScreen(
-                navController = navController
-            )
+            HomeScreen(navController = navController)
         }
         //ProductCategory
         composable("laptoplist") {

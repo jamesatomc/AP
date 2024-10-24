@@ -41,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -56,6 +57,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import shop.kanari.shop.google.GoogleApiContract
 import shop.kanari.shop.ui.theme.ShopTheme
+import shop.kanari.shop.utils.SessionManager
+
 
 @ExperimentalMaterial3Api
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
@@ -63,21 +66,23 @@ import shop.kanari.shop.ui.theme.ShopTheme
 fun LoginScreen(
     navController: NavHostController,
 ) {
-
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val isLoading by remember { mutableStateOf(false) }
     var loginError by remember { mutableStateOf<String?>(null) }
-
+    val context = LocalContext.current
     // Google Sign-In launcher
     val googleSignInLauncher: ActivityResultLauncher<Int> = rememberLauncherForActivityResult(
         contract = GoogleApiContract()
     ) { task: Task<GoogleSignInAccount>? ->
+// Inside the Google Sign-In task onCompleteListener
         task?.addOnCompleteListener { completedTask ->
             if (completedTask.isSuccessful) {
-                val account = completedTask.result
                 // Handle successful sign-in
-                navController.navigate("home")
+                SessionManager.setLogin(context, true)
+                navController.navigate("home") {
+                    popUpTo("login") { inclusive = true }
+                }
             } else {
                 // Handle sign-in failure
                 loginError = "Google Sign-In failed"
@@ -98,7 +103,7 @@ fun LoginScreen(
                 Column(
                     Modifier
                         .fillMaxWidth()
-                        .height(460.dp),verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                        .height(460.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
                         // Logo
                         AsyncImage(
@@ -182,9 +187,6 @@ fun LoginScreen(
                                 painterResource(id = R.drawable.baseline_visibility_24) // Replace with your drawable ID
                             }
 
-                            // Please provide localized description for accessibility services
-                            val description = if (passwordVisible) "Hide password" else "Show password"
-
                             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                                 Icon(
                                     modifier = Modifier.size(24.dp),
@@ -195,7 +197,7 @@ fun LoginScreen(
                         }
                     )
 
-                    Box(Modifier.fillMaxWidth()){
+                    Box(Modifier.fillMaxWidth()) {
                         TextButton(
                             onClick = {
                                 navController.navigate("forgeScreen") {
@@ -204,7 +206,6 @@ fun LoginScreen(
                             },
                             Modifier
                                 .padding(start = 2.dp)
-
                         ) {
                             Text("Forge Password")
                         }
@@ -213,27 +214,6 @@ fun LoginScreen(
                     Button(
                         onClick = {
                             navController.navigate("home")
-                            //api
-//                            isLoading = false
-//                            coroutineScope.launch {
-//                                try {
-//                                    isLoading = true
-//                                    val response = loginService.login(LoginRequest(username, password))
-//                                    if (response.isSuccessful) {
-//
-//                                        navController.navigate("RootHomeScreen") {
-//                                            popUpTo("loginScreen") { inclusive = true }
-//                                        }
-//
-//                                    } else {
-//                                        loginError = response.errorBody()
-//                                    }
-//                                } catch (e: Exception) {
-//                                    loginError = "Login failed"
-//                                } finally {
-//                                    isLoading = false
-//                                }
-//                            }
                         },
                         enabled = !isLoading,
                         modifier = Modifier
