@@ -12,6 +12,7 @@ composeBom = "2024.10.00"
 volley = "1.2.1"
 navigationCompose = "2.8.3"
 runtimeLivedata = "1.7.4"
+uiTextGoogleFonts = "1.7.4"
 
 
 [libraries]
@@ -33,6 +34,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
+androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
